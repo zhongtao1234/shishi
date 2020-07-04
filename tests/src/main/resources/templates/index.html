@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>客户信息</title>
+<link th:href="@{/css/bootstrap.min.css}"  rel="stylesheet" type="text/css"/>
+	<style type="text/css">
+		p{
+			padding: 10px 10px
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+			<!-- <form action=""> -->
+				<p>
+					客户编号:<input type="text" v-model="list.id" > 
+					客户名称:<input type="text" v-model="list.name"> 
+				</p>
+				<p>
+					联系人:<input type="text" v-model="list.link"> 
+					创建日期:<input type="text" v-model="list.creatdate"> 
+				</p>
+				<p>
+					联系电话:<input type="text" v-model="list.phone"> 
+					送货地址:<input type="text" v-model="list.address"> 
+				</p>
+				<p>
+					负责人:<input type="text" v-model="list.principal" > 
+					税务登记号:<input type="text" v-model="list.numberid"> 
+				</p>
+				送货地址详情
+				<p>
+						<textarea rows="10" cols="70" v-model="details">
+							
+						</textarea>
+				</p>
+				<button @click="query()">查询</button>
+				<button @click="insert()">保存</button>
+			<!-- </form> -->
+	</div>
+<script type="text/javascript" th:src="@{/js/jquery-1.12.4.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/vue.js}"></script>
+<script type="text/javascript">
+		var vm=new Vue({
+			el:".container",
+			data(){
+				return{  
+					list:{},
+					querylist:{}
+					
+				}
+			},
+			methods:{
+				query(){
+					var that=this;
+					$.ajax({
+						url:"[[@{/CustomController/findAll}]]",
+						success:function(result){
+							console.log(result)
+							that.list=result
+						}
+					}) 
+				},insert(){
+					var list = this.list;
+					list = JSON.stringify(list);
+					console.log(list)
+					$.ajax({
+						url:"[[@{/CustomController/create}]]",
+						data:list,
+						contentType:"application/json;charset=utf-8",
+						type:"post",
+						success:function(result){
+							alert(result)
+						}
+					});
+				}
+			},
+			created(){
+				this.list={}
+			}
+		})
+	
+</script>	
+</body>
+</html>
